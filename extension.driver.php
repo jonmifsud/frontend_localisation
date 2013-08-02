@@ -293,6 +293,25 @@
 			$language = General::sanitize((string)$_REQUEST['fl-language']);
 			$region = General::sanitize((string)$_REQUEST['fl-region']);
 
+			/**
+			 * Immediately after determining which language is set from the request params.
+			 * Allows you to modify the language/region amongst other possibilities
+			 *
+			 * @since Symphony 2.3.1
+			 * @delegate LanguageIdentified
+			 * @param string $context
+			 *  '/frontend/'
+			 * @param string $language
+			 *  The detected language
+			 * @param string $region
+			 *  The detected region if any
+			 */
+			Symphony::ExtensionManager()->notifyMembers('LanguageIdentified', '/extensions/frontend_localisation/', array(
+				'language' => &$language,
+				'region' => &$region
+			));
+
+
 			// set language code
 			if( false === FLang::setLangCode($language, $region) ){
 
